@@ -230,22 +230,30 @@
   const PASSWORD = "personaX";
   const BASE_URL = window.location.origin + "/download.html";
 
+  function showMain() {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("mainPage").style.display = "block";
+    loadData();
+  }
+
   function login() {
     const pw = document.getElementById("pwInput").value;
     if (pw === PASSWORD) {
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("mainPage").style.display = "block";
-      loadData();
+      sessionStorage.setItem("px_auth", "1");
+      showMain();
     } else {
       document.getElementById("loginError").style.display = "block";
     }
   }
 
   function logout() {
+    sessionStorage.removeItem("px_auth");
     document.getElementById("loginPage").style.display = "flex";
     document.getElementById("mainPage").style.display = "none";
     document.getElementById("pwInput").value = "";
   }
+
+  if (sessionStorage.getItem("px_auth") === "1") showMain();
 
   async function createRef() {
     const name = document.getElementById("refInput").value.trim();
