@@ -122,6 +122,17 @@
       background: #f0eaff;
       color: #8f86a4;
     }
+    .del-btn {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1.5px solid #ffd0e8;
+      background: #fff;
+      color: #fa55aa;
+      font-size: 0.78rem;
+      font-family: "Outfit", sans-serif;
+      cursor: pointer;
+    }
+    .del-btn:hover { background: #fff0f7; }
     .loading { color: #8f86a4; font-size: 0.9rem; padding: 20px 0; }
     .empty { color: #8f86a4; font-size: 0.9rem; padding: 24px 0; text-align: center; }
   </style>
@@ -211,6 +222,7 @@
       <thead><tr>
         <th>名称 / 链接</th>
         <th style="text-align:right">点击数</th>
+        <th></th>
       </tr></thead><tbody>`;
 
     refs.forEach(r => {
@@ -225,6 +237,7 @@
           </div>
         </td>
         <td><span class="badge ${count === 0 ? 'zero' : ''}">${count}</span></td>
+        <td><button class="del-btn" onclick="deleteRef('${r.name}')">删除</button></td>
       </tr>`;
     });
 
@@ -236,6 +249,15 @@
     navigator.clipboard.writeText(url);
     el.style.opacity = "1";
     setTimeout(() => el.style.opacity = "0.5", 1000);
+  }
+
+  async function deleteRef(name) {
+    if (!confirm(`删除「${name}」？`)) return;
+    await fetch(`${SUPABASE_URL}/rest/v1/refs?name=eq.${encodeURIComponent(name)}`, {
+      method: "DELETE",
+      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+    });
+    loadData();
   }
 </script>
 </body>
