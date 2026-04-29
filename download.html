@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="软件下载页，支持 Android 与 iOS。" />
+    <title>ดาวน์โหลด personaX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/icons_25321_379.a06ec91739196f7661cf7fd8ae12e0c7.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <!-- 视频区 -->
+      <div class="preview-section">
+        <video class="hero-video" autoplay muted loop playsinline preload="auto"
+          poster="poster.jpg"
+          src="https://image.tensorartassets.com/operation/media/2026-04/38e771a2-2de1-4c2d-8205-4ddb084e01e9.mp4">
+        </video>
+      </div>
+
+      <!-- 品牌区 + 按钮区 -->
+      <section class="brand-section reveal">
+        <img
+          class="brand-badge"
+          src="https://image.tensorartassets.com/operation/media/2026-04/db25d8b8-08b8-40fc-b9d6-cd77decb7336.png"
+          alt="personaX 图标"
+        />
+        <h1 class="brand-name">personaX</h1>
+        <p class="brand-desc">Nia ชวนคุณเข้าสู่โลก OC</p>
+
+        <!-- 下载按钮 -->
+        <div id="singleButtonWrap" class="single-button-wrap">
+          <a id="smartDownloadBtn" class="main-download" href="#">ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน</a>
+        </div>
+        <div id="multiButtonWrap" class="platform-row">
+          <a id="androidBtn" class="platform-link" href="#">ดาวน์โหลด Android</a>
+          <a id="iosBtn" class="platform-link" href="#">ดาวน์โหลด iOS</a>
+        </div>
+
+        <!-- 社群 + 问卷文字链 -->
+        <div class="links-section">
+        <div class="links-row"><span class="links-title">ชุมชนทางการ</span>
+          <a class="text-link" href="https://discord.gg/PKJmXyRu8n" target="_blank">
+            <icon-park-discord size="14" />
+            Discord
+          </a>
+          <span class="divider">|</span>
+          <a class="text-link" href="https://www.facebook.com/groups/personaxthai" target="_blank">
+            <icon-park-facebookcolor size="14" />
+            Facebook
+          </a>
+        </div>
+        <div class="links-row"><span class="links-title">ความคิดเห็น</span>
+          <a class="text-link" href="https://forms.gle/HifTLmkofWZ5WBss5" target="_blank">EN</a>
+          <span class="divider">|</span>
+          <a class="text-link" href="https://forms.gle/LKJ1UiTTeCxh1Mh17" target="_blank">TH</a>
+          <span class="divider">|</span>
+          <a class="text-link" href="https://forms.gle/pxgQFykm5vjNUSyg9" target="_blank">VN</a>
+        </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 弹窗 -->
+    <div id="iosGuide" class="modal" aria-hidden="true">
+      <div class="modal-panel">
+        <h2>คำแนะนำการติดตั้ง iOS</h2>
+        <p>หากไม่สามารถเปิดได้ใน WeChat หรือ QQ กรุณาเปิดหน้านี้ด้วย Safari แล้วติดตั้งใหม่</p>
+        <button id="closeGuide" class="modal-btn" type="button">เข้าใจแล้ว</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

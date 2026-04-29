@@ -13,11 +13,14 @@ html, body {
   font-family: "Outfit", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: var(--ink);
   overflow: hidden;
+  background: #111;
 }
 
 .shell {
   width: 100%;
+  max-width: 430px;
   height: 100vh;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   background: var(--brand);
