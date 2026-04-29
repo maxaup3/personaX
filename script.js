@@ -86,19 +86,11 @@ function applySmartDownloadState() {
     smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
     return;
   }
-  // 桌面端：隐藏双按钮，显示单按钮，改为复制链接
+  // 桌面端：默认下载安卓
   singleButtonWrap.style.display = "block";
   multiButtonWrap.style.display = "none";
-  smartDownloadBtn.textContent = "กรุณาเปิดด้วยมือถือเพื่อดาวน์โหลด";
-  smartDownloadBtn.href = "#";
-  smartDownloadBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      smartDownloadBtn.textContent = "คัดลอกลิงก์แล้ว!";
-      setTimeout(() => { smartDownloadBtn.textContent = "กรุณาเปิดด้วยมือถือเพื่อดาวน์โหลด"; }, 2000);
-    });
-  });
+  smartDownloadBtn.href = DOWNLOAD_LINKS.android;
+  smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
 }
 
 smartDownloadBtn.addEventListener("click", (e) => {
