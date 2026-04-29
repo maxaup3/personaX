@@ -1,0 +1,134 @@
+const SUPABASE_URL = "https://otooejlgiviktlwaravv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
+
+const DOWNLOAD_LINKS = {
+  android: "https://example.com/app-latest.apk",
+  ios: "https://apps.apple.com/",
+};
+
+// 从 URL 获取 ref 参数（分发链接名字）
+const urlParams = new URLSearchParams(window.location.search);
+const ref = urlParams.get("ref") || "direct";
+
+// 把页面上的 Nia 替换成 ref 名字
+if (ref !== "direct") {
+  document.querySelectorAll(".brand-desc").forEach(el => {
+    el.textContent = el.textContent.replace("Nia", ref);
+  });
+}
+
+// 获取或生成设备 ID
+function getDeviceId() {
+  let id = localStorage.getItem("device_id");
+  if (!id) {
+    id = "d_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem("device_id", id);
+  }
+  return id;
+}
+
+// 上报点击（去重：同一设备同一ref只记一次）
+async function recordClick(platform) {
+  const device_id = getDeviceId();
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/clicks`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "resolution=ignore-duplicates"
+      },
+      body: JSON.stringify({ ref, device_id, platform })
+    });
+  } catch (e) {}
+}
+
+const androidBtn = document.getElementById("androidBtn");
+const iosBtn = document.getElementById("iosBtn");
+const smartDownloadBtn = document.getElementById("smartDownloadBtn");
+const singleButtonWrap = document.getElementById("singleButtonWrap");
+const multiButtonWrap = document.getElementById("multiButtonWrap");
+const iosGuide = document.getElementById("iosGuide");
+const closeGuide = document.getElementById("closeGuide");
+
+const ua = navigator.userAgent.toLowerCase();
+const isIOS = /iphone|ipad|ipod/.test(ua);
+const isAndroid = /android/.test(ua);
+const inWechat = /micromessenger/.test(ua);
+const inQQ = /qq\//.test(ua);
+
+androidBtn.href = DOWNLOAD_LINKS.android;
+iosBtn.href = DOWNLOAD_LINKS.ios;
+
+function openIosGuide() {
+  iosGuide.classList.add("open");
+  iosGuide.setAttribute("aria-hidden", "false");
+}
+
+function closeIosGuide() {
+  iosGuide.classList.remove("open");
+  iosGuide.setAttribute("aria-hidden", "true");
+}
+
+function applySmartDownloadState() {
+  if (isIOS) {
+    singleButtonWrap.style.display = "block";
+    multiButtonWrap.style.display = "none";
+    smartDownloadBtn.href = DOWNLOAD_LINKS.ios;
+    smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+    return;
+  }
+  if (isAndroid) {
+    singleButtonWrap.style.display = "block";
+    multiButtonWrap.style.display = "none";
+    smartDownloadBtn.href = DOWNLOAD_LINKS.android;
+    smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+    return;
+  }
+  // 桌面端：隐藏双按钮，显示单按钮，改为复制链接
+  singleButtonWrap.style.display = "block";
+  multiButtonWrap.style.display = "none";
+  smartDownloadBtn.textContent = "กรุณาเปิดด้วยมือถือเพื่อดาวน์โหลด";
+  smartDownloadBtn.href = "#";
+  smartDownloadBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      smartDownloadBtn.textContent = "คัดลอกลิงก์แล้ว!";
+      setTimeout(() => { smartDownloadBtn.textContent = "กรุณาเปิดด้วยมือถือเพื่อดาวน์โหลด"; }, 2000);
+    });
+  });
+}
+
+smartDownloadBtn.addEventListener("click", (e) => {
+  recordClick(isIOS ? "ios" : "android");
+  if (isIOS && (inWechat || inQQ)) {
+    e.preventDefault();
+    openIosGuide();
+  }
+});
+
+androidBtn.addEventListener("click", () => recordClick("android"));
+iosBtn.addEventListener("click", (e) => {
+  recordClick("ios");
+  if (inWechat || inQQ) {
+    e.preventDefault();
+    openIosGuide();
+  }
+});
+
+closeGuide.addEventListener("click", closeIosGuide);
+iosGuide.addEventListener("click", (e) => {
+  if (e.target === iosGuide) closeIosGuide();
+});
+
+applySmartDownloadState();
+
+// 强制触发视频自动播放
+const heroVideo = document.querySelector(".hero-video");
+if (heroVideo) {
+  heroVideo.play().catch(() => {
+    document.addEventListener("click", () => heroVideo.play(), { once: true });
+  });
+}
