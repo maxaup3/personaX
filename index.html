@@ -14,52 +14,8 @@
       min-height: 100vh;
     }
 
-    /* 登录页 */
-    #loginPage {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-    .login-box {
-      background: #fff;
-      border-radius: 24px;
-      padding: 40px 32px;
-      width: min(90vw, 360px);
-      box-shadow: 0 8px 32px rgba(100, 80, 160, 0.12);
-      text-align: center;
-    }
-    .login-box h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-    .login-box p { color: #8f86a4; font-size: 0.88rem; margin-bottom: 28px; }
-    .login-box input {
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 999px;
-      border: 1.5px solid #e0d8f0;
-      font-size: 0.95rem;
-      font-family: "Outfit", sans-serif;
-      outline: none;
-      margin-bottom: 12px;
-      text-align: center;
-      letter-spacing: 0.1em;
-    }
-    .login-box input:focus { border-color: #fa55aa; }
-    .login-box button {
-      width: 100%;
-      padding: 14px;
-      border-radius: 999px;
-      border: none;
-      background: linear-gradient(180deg, #fa55aa, #ff44cd);
-      color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      font-family: "Outfit", sans-serif;
-    }
-    .login-error { color: #ff44cd; font-size: 0.85rem; margin-top: 10px; display: none; }
-
     /* 主页面 */
-    #mainPage { display: none; padding: 32px 20px; max-width: 720px; margin: 0 auto; }
+    #mainPage { padding: 32px 20px; max-width: 720px; margin: 0 auto; }
     .page-header {
       display: flex;
       justify-content: space-between;
@@ -68,17 +24,6 @@
     }
     .page-header h1 { font-size: 1.5rem; font-weight: 800; }
     .page-header p { color: #8f86a4; font-size: 0.85rem; margin-top: 4px; }
-    .logout-btn {
-      padding: 8px 18px;
-      border-radius: 999px;
-      border: 1.5px solid #e0d8f0;
-      background: #fff;
-      color: #8f86a4;
-      font-size: 0.85rem;
-      font-family: "Outfit", sans-serif;
-      cursor: pointer;
-    }
-
     .card {
       background: #fff;
       border-radius: 20px;
@@ -183,17 +128,6 @@
 </head>
 <body>
 
-<!-- 登录页 -->
-<div id="loginPage">
-  <div class="login-box">
-    <h1>personaX</h1>
-    <p>请输入管理密码</p>
-    <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()" />
-    <button onclick="login()">进入后台</button>
-    <p class="login-error" id="loginError">密码错误，请重试</p>
-  </div>
-</div>
-
 <!-- 主页面 -->
 <div id="mainPage">
   <div class="page-header">
@@ -201,7 +135,6 @@
       <h1>下载链接管理</h1>
       <p>生成分发链接 · 查看各渠道点击数据</p>
     </div>
-    <button class="logout-btn" onclick="logout()">退出</button>
   </div>
 
   <!-- 生成链接 -->
@@ -227,33 +160,9 @@
 <script>
   const SUPABASE_URL = "https://otooejlgiviktlwaravv.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
-  const PASSWORD = "personaX";
   const BASE_URL = window.location.origin + "/download.html";
 
-  function showMain() {
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("mainPage").style.display = "block";
-    loadData();
-  }
-
-  function login() {
-    const pw = document.getElementById("pwInput").value;
-    if (pw === PASSWORD) {
-      sessionStorage.setItem("px_auth", "1");
-      showMain();
-    } else {
-      document.getElementById("loginError").style.display = "block";
-    }
-  }
-
-  function logout() {
-    sessionStorage.removeItem("px_auth");
-    document.getElementById("loginPage").style.display = "flex";
-    document.getElementById("mainPage").style.display = "none";
-    document.getElementById("pwInput").value = "";
-  }
-
-  if (sessionStorage.getItem("px_auth") === "1") showMain();
+  loadData();
 
   async function createRef() {
     const name = document.getElementById("refInput").value.trim();
