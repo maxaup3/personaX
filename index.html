@@ -244,15 +244,22 @@
 
       const refs = await refsRes.json();
       const clicks = await clicksRes.json();
+      console.log("Refs:", refs);
+      console.log("Clicks:", clicks);
 
       const clickMap = {};
       let totalPC = 0, totalMobile = 0;
       clicks.forEach(c => {
-        if (!clickMap[c.ref]) clickMap[c.ref] = { pc: 0, mobile: 0 };
-        if (c.platform === 'desktop') clickMap[c.ref].pc++;
-        else clickMap[c.ref].mobile++;
-        if (c.platform === 'desktop') totalPC++;
-        else totalMobile++;
+        if (!clickMap[c.ref]) clickMap[c.ref] = { pc: 0, mobile: 0, device_ids: new Set() };
+        // 去重：同一设备只计一次
+        const key = `${c.ref}-${c.device_id}-${c.platform}`;
+        if (!clickMap[c.ref].device_ids.has(key)) {
+          clickMap[c.ref].device_ids.add(key);
+          if (c.platform === 'desktop') clickMap[c.ref].pc++;
+          else clickMap[c.ref].mobile++;
+          if (c.platform === 'desktop') totalPC++;
+          else totalMobile++;
+        }
       });
 
       document.getElementById("stat-total").textContent = clicks.length;
