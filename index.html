@@ -283,10 +283,17 @@
           method: "DELETE",
           headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
         });
-        if (!res.ok) throw new Error("删除失败");
+        const text = await res.text();
+        console.log("Delete response:", res.status, text);
+        if (!res.ok) {
+          showToast(`删除失败: ${res.status}`);
+          return;
+        }
         showToast("链接已删除");
+        await new Promise(r => setTimeout(r, 500));
         loadData();
       } catch (e) {
+        console.error("Delete error:", e);
         showToast("删除失败，请重试");
       }
     }
