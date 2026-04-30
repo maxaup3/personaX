@@ -139,6 +139,22 @@
     .config-item input { padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0d8f0; font-size: 0.85rem; }
     .config-item input:focus { border-color: #fa55aa; outline: none; }
     .config-item .btn-primary { padding: 8px 12px; font-size: 0.8rem; }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2d2940;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 999;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
     .loading { color: #8f86a4; font-size: 0.9rem; padding: 20px 0; }
     .empty { color: #8f86a4; font-size: 0.9rem; padding: 24px 0; text-align: center; }
   </style>
@@ -196,10 +212,19 @@
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
   const SUPABASE_URL = "https://otooejlgiviktlwaravv.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
   const BASE_URL = window.location.origin + "/download.html";
+
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
 
   async function saveConfig(key, value) {
     await fetch(`${SUPABASE_URL}/rest/v1/config?key=eq.${encodeURIComponent(key)}`, {
@@ -211,6 +236,7 @@
       },
       body: JSON.stringify({ value })
     });
+    showToast("保存成功");
   }
 
   async function loadConfig() {
