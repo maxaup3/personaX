@@ -295,7 +295,7 @@
       fetch(`${SUPABASE_URL}/rest/v1/refs?select=name,created_at&order=created_at.desc`, {
         headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
       }),
-      fetch(`${SUPABASE_URL}/rest/v1/clicks?select=ref`, {
+      fetch(`${SUPABASE_URL}/rest/v1/clicks?select=ref,device_id`, {
         headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
       })
     ]);
@@ -303,9 +303,16 @@
     const refs = await refsRes.json();
     const clicks = await clicksRes.json();
 
-    // 统计每个 ref 的点击数
+    // 统计唯一设备数（按 ref 分组，每个 ref 计算有多少设备点击过）
     const clickMap = {};
-    clicks.forEach(c => { clickMap[c.ref] = (clickMap[c.ref] || 0) + 1; });
+    clicks.forEach(c => {
+      if (!clickMap[c.ref]) clickMap[c.ref] = new Set();
+      clickMap[c.ref].add(c.device_id);
+    });
+    // 转换 Set 为数字
+    Object.keys(clickMap).forEach(ref => {
+      clickMap[ref] = clickMap[ref].size;
+    });
 
     if (!refs.length) {
       document.getElementById("listContainer").innerHTML = '<p class="empty">暂无链接，先生成一个吧</p>';
