@@ -54,10 +54,9 @@ function getDeviceId() {
   return id;
 }
 
-// 上报点击（去重：同一设备一天只记一次）
+// 上报点击（去重：同一设备只记一次）
 async function recordClick(platform) {
   const device_id = getDeviceId();
-  const today = new Date().toISOString().split('T')[0];
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/clicks`, {
       method: "POST",
@@ -67,7 +66,7 @@ async function recordClick(platform) {
         "Content-Type": "application/json",
         "Prefer": "resolution=ignore-duplicates"
       },
-      body: JSON.stringify({ ref: "all", device_id, platform, date: today })
+      body: JSON.stringify({ ref, device_id })
     });
   } catch (e) {}
 }

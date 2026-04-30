@@ -303,16 +303,9 @@
     const refs = await refsRes.json();
     const clicks = await clicksRes.json();
 
-    // 统计唯一设备数（按 ref 分组，每个 ref 计算有多少设备点击过）
+    // 统计每个 ref 的点击设备数（同设备同ref只算一次）
     const clickMap = {};
-    clicks.forEach(c => {
-      if (!clickMap[c.ref]) clickMap[c.ref] = new Set();
-      clickMap[c.ref].add(c.device_id);
-    });
-    // 转换 Set 为数字
-    Object.keys(clickMap).forEach(ref => {
-      clickMap[ref] = clickMap[ref].size;
-    });
+    clicks.forEach(c => { clickMap[c.ref] = (clickMap[c.ref] || 0) + 1; });
 
     if (!refs.length) {
       document.getElementById("listContainer").innerHTML = '<p class="empty">暂无链接，先生成一个吧</p>';
