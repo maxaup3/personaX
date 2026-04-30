@@ -86,7 +86,9 @@ const inWechat = /micromessenger/.test(ua);
 const inQQ = /qq\//.test(ua);
 
 androidBtn.href = DOWNLOAD_LINKS.android;
+androidBtn.setAttribute('rel', 'noreferrer');
 iosBtn.href = DOWNLOAD_LINKS.ios;
+iosBtn.setAttribute('rel', 'noreferrer');
 
 function openIosGuide() {
   iosGuide.classList.add("open");
@@ -111,6 +113,7 @@ function applySmartDownloadState() {
   }
   // Android + 桌面端
   smartDownloadBtn.href = DOWNLOAD_LINKS.android;
+  smartDownloadBtn.setAttribute('rel', 'noreferrer');
   smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
   smartDownloadBtn.style.cursor = "pointer";
   smartDownloadBtn.style.opacity = "1";
