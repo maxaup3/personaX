@@ -264,9 +264,7 @@ async function loadData() {
         return;
       }
 
-      window._refNames = refs.map(r => r.name);
-
-      tbody.innerHTML = refs.map((r, i) => {
+      tbody.innerHTML = refs.map(r => {
         const url = `${BASE_URL}?ref=${encodeURIComponent(r.name)}`;
         const stats = clickMap[r.name] || { pc: 0, mobile: 0 };
         const total = stats.pc + stats.mobile;
@@ -281,28 +279,38 @@ async function loadData() {
           <td style="text-align: center;"><span class="badge ${stats.pc === 0 ? 'badge-gray' : 'badge-pink'}">${stats.pc}</span></td>
           <td style="text-align: center;"><span class="badge ${stats.mobile === 0 ? 'badge-gray' : 'badge-pink'}">${stats.mobile}</span></td>
           <td style="text-align: center;"><span class="badge ${total === 0 ? 'badge-gray' : 'badge-pink'}">${total}</span></td>
-          <td style="text-align: right;"><button class="btn btn-danger" onclick="deleteRef(window._refNames[${i}])">删除</button></td>
+          <td style="text-align: right;"><button class="btn btn-danger" data-ref="${r.name}">删除</button></td>
         </tr>`;
       }).join('');
     }
 
-    async function deleteRef(name) {
+    // 用事件委托绑在 tbody 上，永远不会失效
+    document.getElementById("linksBody").addEventListener("click", async function(e) {
+      const btn = e.target.closest("button[data-ref]");
+      if (!btn) return;
+      const name = btn.dataset.ref;
       if (!confirm(`确定删除「${name}」？`)) return;
+      btn.disabled = true;
+      btn.textContent = "删除中...";
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/refs?name=eq.${encodeURIComponent(name)}`, {
           method: "DELETE",
           headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
         });
-        if (!res.ok) {
-          showToast(`删除失败: ${res.status}`);
-          return;
+        if (res.ok) {
+          showToast("链接已删除");
+          loadData();
+        } else {
+          showToast("删除失败 " + res.status);
+          btn.disabled = false;
+          btn.textContent = "删除";
         }
-        showToast("链接已删除");
-        await loadData();
-      } catch (e) {
-        showToast("删除失败，请重试");
+      } catch(e) {
+        showToast("网络错误");
+        btn.disabled = false;
+        btn.textContent = "删除";
       }
-    }
+    });
 
     function copyUrl(url) {
       navigator.clipboard.writeText(url);
