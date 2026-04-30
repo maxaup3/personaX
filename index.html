@@ -1,435 +1,311 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>personaX 管理后台</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.11.4/dist/reset.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.11.4/dist/antd.min.css" />
   <style>
-    :root {
-      /* Soft UI Evolution: Modern SaaS Palette */
-      --color-text-primary: #1a1a2e;
-      --color-text-secondary: #5f5f73;
-      --color-text-tertiary: #8b8b9e;
-      --color-border: #e0e0ee;
-      --color-bg-primary: #fff;
-      --color-bg-secondary: #f9f9fd;
-      --color-bg-tertiary: #f3f3f9;
-      --color-accent: #fa55aa;
-      --color-accent-light: #87ceeb;
-      --color-accent-alt: #90ee90;
-      --color-badge-zero: #dcdce6;
-      --color-badge-zero-text: #8b8b9e;
-      --spacing-xs: 4px;
-      --spacing-sm: 8px;
-      --spacing-md: 12px;
-      --spacing-lg: 16px;
-      --spacing-xl: 20px;
-      --spacing-2xl: 24px;
-      --spacing-3xl: 28px;
-      --spacing-4xl: 40px;
-      --radius-sm: 6px;
-      --radius-md: 8px;
-      --radius-lg: 10px;
-      --radius-full: 999px;
-      /* Soft shadows: softer than flat, clearer than neumorphism */
-      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.02);
-      --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-      --shadow-focus: 0 0 0 3px rgba(250, 85, 170, 0.12);
-      --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--color-bg-secondary);
-      color: var(--color-text-primary);
-      min-height: 100vh;
-      line-height: 1.5;
-    }
-
-    /* 主页面 */
-    #mainPage { padding: var(--spacing-4xl) var(--spacing-lg); max-width: 1000px; margin: 0 auto; }
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: var(--spacing-3xl);
-    }
-    .page-header h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; }
-    .page-header p { color: var(--color-text-secondary); font-size: 0.875rem; margin-top: var(--spacing-sm); font-weight: 500; }
-    .stats-desc { color: var(--color-text-tertiary); font-size: 0.8125rem; margin-top: var(--spacing-xs); }
-    .card {
-      background: var(--color-bg-primary);
-      border-radius: var(--radius-lg);
-      padding: var(--spacing-3xl);
-      margin-bottom: var(--spacing-2xl);
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--color-border);
-      transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
-    }
-    .card:hover { box-shadow: var(--shadow-lg); border-color: #ccc8dc; }
-    .card h2 { font-size: 1.0625rem; font-weight: 700; margin-bottom: var(--spacing-xl); color: var(--color-text-primary); }
-
-    .input-row { display: flex; gap: var(--spacing-md); }
-    input[type="text"] {
-      flex: 1;
-      padding: var(--spacing-md) var(--spacing-lg);
-      border-radius: var(--radius-full);
-      border: 1px solid var(--color-border);
-      font-size: 0.9375rem;
-      font-family: inherit;
-      outline: none;
-      background: var(--color-bg-primary);
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
-    }
-    input[type="text"]:hover { border-color: #ccc8dc; background: var(--color-bg-secondary); }
-    input[type="text"]:focus { border-color: var(--color-accent); box-shadow: var(--shadow-focus), inset 0 1px 0 rgba(0,0,0,0.02); }
-    .btn-primary {
-      padding: var(--spacing-md) var(--spacing-lg);
-      border-radius: var(--radius-full);
-      border: none;
-      background: linear-gradient(135deg, var(--color-accent), #ff44cd);
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      font-family: inherit;
-      white-space: nowrap;
-      transition: all var(--transition-normal);
-      box-shadow: var(--shadow-md);
-      letter-spacing: -0.01em;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    .btn-primary:active { transform: translateY(0); box-shadow: var(--shadow-md); }
-
-    /* 链接列表 */
-    .list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--spacing-xl);
-    }
-    .btn-ghost {
-      padding: var(--spacing-sm) var(--spacing-lg);
-      border-radius: var(--radius-full);
-      border: 1px solid var(--color-border);
-      background: var(--color-bg-primary);
-      color: var(--color-text-secondary);
-      font-size: 0.8125rem;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-ghost:hover { background: var(--color-bg-secondary); border-color: #d0d0dd; color: var(--color-text-primary); }
-
-    table { width: 100%; border-collapse: collapse; }
-    th {
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--color-text-tertiary);
-      padding: var(--spacing-md);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border-bottom: 1px solid var(--color-border);
-    }
-    th:first-child { text-align: left; }
-    td {
-      padding: var(--spacing-lg) var(--spacing-md);
-      border-top: 1px solid #fafafc;
-      font-size: 0.9rem;
-      vertical-align: middle;
-      text-align: center;
-    }
-    td:first-child { text-align: left; }
-    .ref-name { font-weight: 700; display: block; margin-bottom: var(--spacing-xs); color: var(--color-text-primary); }
-    .ref-url {
-      font-size: 0.75rem;
-      color: var(--color-text-tertiary);
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-    }
-    .ref-url a { color: var(--color-text-tertiary); text-decoration: none; word-break: break-all; }
-    .copy-icon {
-      cursor: pointer;
-      opacity: 0.5;
-      flex-shrink: 0;
-      transition: all 0.2s;
-      display: flex;
-    }
-    .copy-icon:hover { opacity: 1; }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 12px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--color-accent), #ff44cd);
-      color: #fff;
-      font-size: 0.8125rem;
-      font-weight: 700;
-      min-width: 48px;
-      height: 32px;
-      box-shadow: var(--shadow-md);
-      transition: all var(--transition-normal);
-      letter-spacing: -0.01em;
-    }
-    .badge:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    .badge.zero {
-      background: var(--color-badge-zero);
-      color: var(--color-badge-zero-text);
-    }
-    .del-btn {
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--color-border);
-      background: var(--color-bg-primary);
-      color: var(--color-text-secondary);
-      font-size: 0.8rem;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .del-btn:hover { background: var(--color-bg-secondary); border-color: #d0d0dd; color: var(--color-text-primary); }
-    .del-btn:active { transform: scale(0.98); }
-    .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-xl); }
-    .config-item { display: flex; flex-direction: column; gap: var(--spacing-sm); }
-    .config-item label { font-size: 0.8125rem; color: var(--color-text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-    .config-item input { padding: var(--spacing-md) var(--spacing-lg); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: 0.875rem; font-family: inherit; transition: all 0.2s; }
-    .config-item input:focus { border-color: var(--color-accent); outline: none; box-shadow: var(--shadow-focus); }
-    .config-item .btn-primary { padding: var(--spacing-sm) var(--spacing-md); font-size: 0.75rem; }
-    .toast {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--color-text-primary);
-      color: #fff;
-      padding: var(--spacing-lg) var(--spacing-2xl);
-      border-radius: var(--radius-md);
-      font-size: 0.9375rem;
-      font-weight: 500;
-      opacity: 0;
-      transition: opacity 0.3s ease-out;
-      z-index: 999;
-      pointer-events: none;
-      box-shadow: var(--shadow-lg);
-    }
-    .toast.show { opacity: 1; }
-    .loading { color: var(--color-text-secondary); font-size: 0.9rem; padding: var(--spacing-xl) 0; text-align: center; }
-    .empty { color: var(--color-text-secondary); font-size: 0.9rem; padding: var(--spacing-2xl) 0; text-align: center; }
+    * { box-sizing: border-box; }
+    html, body, #app { height: 100%; margin: 0; padding: 0; }
+    body { background: #fafafa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
+    .layout { display: flex; height: 100vh; }
+    .layout-sidebar { width: 200px; background: #fff; border-right: 1px solid #f0f0f0; padding: 24px 0; overflow-y: auto; }
+    .layout-content { flex: 1; display: flex; flex-direction: column; }
+    .layout-header { background: #fff; border-bottom: 1px solid #f0f0f0; padding: 16px 32px; }
+    .layout-main { flex: 1; overflow-y: auto; padding: 32px; }
+    .menu-item { padding: 12px 24px; cursor: pointer; color: #666; transition: all 0.2s; }
+    .menu-item:hover { background: #fafafa; color: #fa55aa; }
+    .menu-item.active { background: #fff5fa; color: #fa55aa; border-right: 3px solid #fa55aa; }
+    .page-title { font-size: 24px; font-weight: 600; margin-bottom: 24px; }
+    .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+    .form-item { display: flex; flex-direction: column; gap: 8px; }
+    .form-item label { font-weight: 500; color: #000; font-size: 14px; }
+    .form-item input { padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
+    .form-item input:hover { border-color: #b3b3b3; }
+    .form-item input:focus { outline: none; border-color: #fa55aa; box-shadow: 0 0 0 2px rgba(250, 85, 170, 0.2); }
+    .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 14px; }
+    .btn-primary { background: linear-gradient(135deg, #fa55aa, #ff44cd); color: #fff; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(250, 85, 170, 0.3); }
+    .btn-default { background: #fff; border: 1px solid #d9d9d9; color: #666; }
+    .btn-default:hover { background: #fafafa; border-color: #b3b3b3; }
+    .btn-danger { background: #fff; border: 1px solid #ffccc7; color: #ff4d4f; }
+    .btn-danger:hover { background: #fff1f0; }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th { background: #fafafa; padding: 12px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid #f0f0f0; font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+    .table td { padding: 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+    .table tr:hover { background: #fafafa; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px; border-radius: 10px; font-weight: 600; font-size: 12px; min-width: 48px; height: 32px; }
+    .badge-pink { background: linear-gradient(135deg, #fa55aa, #ff44cd); color: #fff; }
+    .badge-gray { background: #f0f0f0; color: #999; }
+    .action-btns { display: flex; gap: 8px; }
+    .stats-desc { color: #999; font-size: 13px; margin-top: 4px; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; margin-top: 32px; }
+    .section-title:first-child { margin-top: 0; }
   </style>
 </head>
 <body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="layout-sidebar">
+      <div style="padding: 0 24px; margin-bottom: 32px;">
+        <div style="font-size: 18px; font-weight: 700; color: #fa55aa;">personaX</div>
+        <div style="font-size: 12px; color: #999; margin-top: 4px;">管理后台</div>
+      </div>
+      <div class="menu-item active" onclick="switchTab('dashboard')">📊 仪表板</div>
+      <div class="menu-item" onclick="switchTab('config')">⚙️ 配置管理</div>
+      <div class="menu-item" onclick="switchTab('links')">🔗 链接管理</div>
+    </div>
 
-<!-- 主页面 -->
-<div id="mainPage">
-  <div class="page-header">
-    <div>
-      <h1>下载链接管理</h1>
-      <p>生成分发链接 · 查看各渠道点击数据</p>
+    <!-- Main Content -->
+    <div class="layout-content">
+      <div class="layout-header">
+        <h1 style="margin: 0; font-size: 20px;">personaX 下载链接管理系统</h1>
+      </div>
+
+      <div class="layout-main">
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" style="display: block;">
+          <div class="page-title">仪表板</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;">
+            <div class="card" style="text-align: center; padding: 32px 24px;">
+              <div style="font-size: 32px; font-weight: 700; color: #fa55aa;" id="stat-total">0</div>
+              <div style="color: #999; margin-top: 8px;">总下载数</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 32px 24px;">
+              <div style="font-size: 32px; font-weight: 700; color: #1890ff;" id="stat-refs">0</div>
+              <div style="color: #999; margin-top: 8px;">分发链接数</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 32px 24px;">
+              <div style="font-size: 32px; font-weight: 700; color: #52c41a;" id="stat-pc">0</div>
+              <div style="color: #999; margin-top: 8px;">PC 下载</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 32px 24px;">
+              <div style="font-size: 32px; font-weight: 700; color: #faad14;" id="stat-mobile">0</div>
+              <div style="color: #999; margin-top: 8px;">手机下载</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Config Tab -->
+        <div id="config-tab" style="display: none;">
+          <div class="page-title">下载链接配置</div>
+          <div class="card">
+            <div class="section-title">基础设置</div>
+            <div class="form-grid">
+              <div class="form-item">
+                <label>Android 下载链接</label>
+                <input type="text" id="androidUrl" placeholder="留空则使用默认链接" />
+                <button class="btn btn-primary" onclick="saveConfigAndroid()">保存</button>
+              </div>
+              <div class="form-item">
+                <label>iOS 下载链接（可选）</label>
+                <input type="text" id="iosUrl" placeholder="留空则不显示 iOS 下载选项" />
+                <button class="btn btn-primary" onclick="saveConfigIos()">保存</button>
+              </div>
+              <div class="form-item">
+                <label>视频链接</label>
+                <input type="text" id="videoUrl" placeholder="留空则使用默认链接" />
+                <button class="btn btn-primary" onclick="saveConfigVideo()">保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Links Tab -->
+        <div id="links-tab" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+              <div class="page-title" style="margin-bottom: 4px;">分发链接管理</div>
+              <div class="stats-desc">统计说明：每条链接显示 PC + 手机端的不重复设备下载数</div>
+            </div>
+            <button class="btn btn-default" onclick="loadData()">🔄 刷新</button>
+          </div>
+
+          <div class="card">
+            <div class="section-title">新增分发链接</div>
+            <div style="display: flex; gap: 12px;">
+              <input type="text" id="refInput" placeholder="输入名字，例如：Min" maxlength="30" style="flex: 1; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 6px;" onkeydown="if(event.key==='Enter')createRef()" />
+              <button class="btn btn-primary" onclick="createRef()">生成链接</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">所有链接</div>
+            <table class="table" id="linksTable">
+              <thead>
+                <tr>
+                  <th>名称 / 链接</th>
+                  <th style="text-align: center;">PC</th>
+                  <th style="text-align: center;">手机</th>
+                  <th style="text-align: center;">总计</th>
+                  <th style="text-align: right;">操作</th>
+                </tr>
+              </thead>
+              <tbody id="linksBody">
+                <tr><td colspan="5" style="text-align: center; padding: 40px; color: #999;">加载中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 下载链接配置 -->
-  <div class="card">
-    <h2>下载链接配置</h2>
-    <div class="config-grid">
-      <div class="config-item">
-        <label>Android 下载链接</label>
-        <input type="text" id="androidUrl" placeholder="留空则使用默认链接" />
-        <button class="btn-primary" onclick="saveConfigAndroid()">保存</button>
-      </div>
-      <div class="config-item">
-        <label>iOS 下载链接（可选）</label>
-        <input type="text" id="iosUrl" placeholder="留空则不显示 iOS 下载选项" />
-        <button class="btn-primary" onclick="saveConfigIos()">保存</button>
-      </div>
-      <div class="config-item">
-        <label>视频链接</label>
-        <input type="text" id="videoUrl" placeholder="留空则使用默认链接" />
-        <button class="btn-primary" onclick="saveConfigVideo()">保存</button>
-      </div>
-    </div>
-  </div>
+  <div id="toast" style="position: fixed; bottom: 24px; right: 24px; background: #000; color: #fff; padding: 12px 20px; border-radius: 6px; opacity: 0; transition: opacity 0.3s; pointer-events: none;"></div>
 
-  <!-- 生成链接 -->
-  <div class="card">
-    <h2>新增分发链接</h2>
-    <div class="input-row">
-      <input type="text" id="refInput" placeholder="输入名字，例如：Min" maxlength="30"
-        onkeydown="if(event.key==='Enter')createRef()" />
-      <button class="btn-primary" onclick="createRef()">生成链接</button>
-    </div>
-  </div>
+  <script>
+    const SUPABASE_URL = "https://otooejlgiviktlwaravv.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
+    const BASE_URL = window.location.origin + "/download.html";
 
-  <!-- 链接列表 -->
-  <div class="card">
-    <div class="list-header">
-      <div>
-        <h2>所有链接</h2>
-        <p class="stats-desc">统计说明：每条链接显示 PC + 手机端的不重复设备下载数</p>
-      </div>
-      <button class="btn-ghost" onclick="loadData()">刷新</button>
-    </div>
-    <div id="listContainer"><p class="loading">加载中…</p></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-  const SUPABASE_URL = "https://otooejlgiviktlwaravv.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
-  const BASE_URL = window.location.origin + "/download.html";
-
-  function showToast(msg) {
-    const toast = document.getElementById("toast");
-    toast.textContent = msg;
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
-  }
-
-  async function saveConfigActual(key, value) {
-    await fetch(`${SUPABASE_URL}/rest/v1/config?key=eq.${encodeURIComponent(key)}`, {
-      method: "PATCH",
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization": `Bearer ${SUPABASE_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ value })
-    });
-    showToast("保存成功");
-  }
-
-  async function saveConfigAndroid() {
-    const value = document.getElementById("androidUrl").value;
-    await saveConfigActual('android_url', value);
-  }
-
-  async function saveConfigIos() {
-    const value = document.getElementById("iosUrl").value;
-    await saveConfigActual('ios_url', value);
-  }
-
-  async function saveConfigVideo() {
-    const value = document.getElementById("videoUrl").value;
-    await saveConfigActual('video_url', value);
-  }
-
-  async function loadConfig() {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/config`, {
-      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
-    });
-    const configs = await res.json();
-    const configMap = {};
-    configs.forEach(c => { configMap[c.key] = c.value; });
-    if (configMap.android_url) document.getElementById("androidUrl").value = configMap.android_url;
-    if (configMap.ios_url) document.getElementById("iosUrl").value = configMap.ios_url;
-    if (configMap.video_url) document.getElementById("videoUrl").value = configMap.video_url;
-  }
-
-  loadConfig();
-  loadData();
-
-  async function createRef() {
-    const name = document.getElementById("refInput").value.trim();
-    if (!name) return;
-
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/refs`, {
-      method: "POST",
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization": `Bearer ${SUPABASE_KEY}`,
-        "Content-Type": "application/json",
-        "Prefer": "resolution=ignore-duplicates"
-      },
-      body: JSON.stringify({ name })
-    });
-
-    document.getElementById("refInput").value = "";
-    loadData();
-  }
-
-  async function loadData() {
-    document.getElementById("listContainer").innerHTML = '<p class="loading">加载中…</p>';
-
-    const [refsRes, clicksRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/refs?select=name,created_at&order=created_at.desc`, {
-        headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
-      }),
-      fetch(`${SUPABASE_URL}/rest/v1/clicks?select=ref,platform`, {
-        headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
-      })
-    ]);
-
-    const refs = await refsRes.json();
-    const clicks = await clicksRes.json();
-
-    // 统计每个 ref 的 PC 和手机点击数
-    const clickMap = {};
-    clicks.forEach(c => {
-      if (!clickMap[c.ref]) clickMap[c.ref] = { pc: 0, mobile: 0 };
-      if (c.platform === 'desktop') clickMap[c.ref].pc++;
-      else clickMap[c.ref].mobile++;
-    });
-
-    if (!refs.length) {
-      document.getElementById("listContainer").innerHTML = '<p class="empty">暂无链接，先生成一个吧</p>';
-      return;
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.style.opacity = "1";
+      setTimeout(() => toast.style.opacity = "0", 2000);
     }
 
-    let html = `<table>
-      <thead><tr>
-        <th>名称 / 链接</th>
-        <th style="text-align:right">PC</th>
-        <th style="text-align:right">手机</th>
-        <th style="text-align:right">总计</th>
-        <th></th>
-      </tr></thead><tbody>`;
+    function switchTab(tab) {
+      document.querySelectorAll("[id$='-tab']").forEach(el => el.style.display = 'none');
+      document.getElementById(tab + '-tab').style.display = 'block';
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+      event.target.closest('.menu-item').classList.add('active');
+    }
 
-    refs.forEach(r => {
-      const url = `${BASE_URL}?ref=${encodeURIComponent(r.name)}`;
-      const stats = clickMap[r.name] || { pc: 0, mobile: 0 };
-      const total = stats.pc + stats.mobile;
-      html += `<tr>
-        <td>
-          <span class="ref-name">${r.name}</span>
-          <div class="ref-url">
-            <a href="${url}" target="_blank">${url}</a>
-            <svg class="copy-icon" onclick="copyUrl('${url}', this)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          </div>
-        </td>
-        <td style="text-align:right"><span class="badge ${stats.pc === 0 ? 'zero' : ''}">${stats.pc}</span></td>
-        <td style="text-align:right"><span class="badge ${stats.mobile === 0 ? 'zero' : ''}">${stats.mobile}</span></td>
-        <td style="text-align:right"><span class="badge ${total === 0 ? 'zero' : ''}">${total}</span></td>
-        <td style="text-align:right;width:60px"><button class="del-btn" onclick="deleteRef('${r.name}')">删除</button></td>
-      </tr>`;
-    });
+    async function saveConfigActual(key, value) {
+      await fetch(`${SUPABASE_URL}/rest/v1/config?key=eq.${encodeURIComponent(key)}`, {
+        method: "PATCH",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ value })
+      });
+      showToast("保存成功");
+    }
 
-    html += `</tbody></table>`;
-    document.getElementById("listContainer").innerHTML = html;
-  }
+    async function saveConfigAndroid() {
+      const value = document.getElementById("androidUrl").value;
+      await saveConfigActual('android_url', value);
+    }
 
-  function copyUrl(url, el) {
-    navigator.clipboard.writeText(url);
-    el.style.opacity = "1";
-    setTimeout(() => el.style.opacity = "0.5", 1000);
-  }
+    async function saveConfigIos() {
+      const value = document.getElementById("iosUrl").value;
+      await saveConfigActual('ios_url', value);
+    }
 
-  async function deleteRef(name) {
-    if (!confirm(`删除「${name}」？`)) return;
-    await fetch(`${SUPABASE_URL}/rest/v1/refs?name=eq.${encodeURIComponent(name)}`, {
-      method: "DELETE",
-      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
-    });
+    async function saveConfigVideo() {
+      const value = document.getElementById("videoUrl").value;
+      await saveConfigActual('video_url', value);
+    }
+
+    async function loadConfig() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/config`, {
+        headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+      });
+      const configs = await res.json();
+      const configMap = {};
+      configs.forEach(c => { configMap[c.key] = c.value; });
+      if (configMap.android_url) document.getElementById("androidUrl").value = configMap.android_url;
+      if (configMap.ios_url) document.getElementById("iosUrl").value = configMap.ios_url;
+      if (configMap.video_url) document.getElementById("videoUrl").value = configMap.video_url;
+    }
+
+    async function createRef() {
+      const name = document.getElementById("refInput").value.trim();
+      if (!name) return;
+
+      await fetch(`${SUPABASE_URL}/rest/v1/refs`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "resolution=ignore-duplicates"
+        },
+        body: JSON.stringify({ name })
+      });
+
+      document.getElementById("refInput").value = "";
+      loadData();
+      showToast("链接生成成功");
+    }
+
+    async function loadData() {
+      const [refsRes, clicksRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/refs?select=name,created_at&order=created_at.desc`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        }),
+        fetch(`${SUPABASE_URL}/rest/v1/clicks?select=ref,platform`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        })
+      ]);
+
+      const refs = await refsRes.json();
+      const clicks = await clicksRes.json();
+
+      const clickMap = {};
+      let totalPC = 0, totalMobile = 0;
+      clicks.forEach(c => {
+        if (!clickMap[c.ref]) clickMap[c.ref] = { pc: 0, mobile: 0 };
+        if (c.platform === 'desktop') clickMap[c.ref].pc++;
+        else clickMap[c.ref].mobile++;
+        if (c.platform === 'desktop') totalPC++;
+        else totalMobile++;
+      });
+
+      document.getElementById("stat-total").textContent = clicks.length;
+      document.getElementById("stat-refs").textContent = refs.length;
+      document.getElementById("stat-pc").textContent = totalPC;
+      document.getElementById("stat-mobile").textContent = totalMobile;
+
+      const tbody = document.getElementById("linksBody");
+      if (!refs.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #999;">暂无链接</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = refs.map(r => {
+        const url = `${BASE_URL}?ref=${encodeURIComponent(r.name)}`;
+        const stats = clickMap[r.name] || { pc: 0, mobile: 0 };
+        const total = stats.pc + stats.mobile;
+        return `<tr>
+          <td>
+            <div style="font-weight: 600; margin-bottom: 4px;">${r.name}</div>
+            <div style="font-size: 12px; color: #999; display: flex; align-items: center; gap: 8px;">
+              <a href="${url}" target="_blank" style="color: #999; text-decoration: none;">${url}</a>
+              <svg onclick="copyUrl('${url}')" style="cursor: pointer; opacity: 0.5; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </div>
+          </td>
+          <td style="text-align: center;"><span class="badge ${stats.pc === 0 ? 'badge-gray' : 'badge-pink'}">${stats.pc}</span></td>
+          <td style="text-align: center;"><span class="badge ${stats.mobile === 0 ? 'badge-gray' : 'badge-pink'}">${stats.mobile}</span></td>
+          <td style="text-align: center;"><span class="badge ${total === 0 ? 'badge-gray' : 'badge-pink'}">${total}</span></td>
+          <td style="text-align: right;"><button class="btn btn-danger" onclick="deleteRef('${r.name}')">删除</button></td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function deleteRef(name) {
+      if (!confirm(`删除「${name}」？`)) return;
+      await fetch(`${SUPABASE_URL}/rest/v1/refs?name=eq.${encodeURIComponent(name)}`, {
+        method: "DELETE",
+        headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+      });
+      loadData();
+      showToast("链接已删除");
+    }
+
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url);
+      showToast("已复制到剪贴板");
+    }
+
+    loadConfig();
     loadData();
-  }
-</script>
+  </script>
 </body>
 </html>
