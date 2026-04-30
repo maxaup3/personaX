@@ -99,37 +99,17 @@ function closeIosGuide() {
 }
 
 function applySmartDownloadState() {
-  if (isIOS) {
-    singleButtonWrap.style.display = "block";
-    multiButtonWrap.style.display = "none";
-    if (DOWNLOAD_LINKS.ios) {
-      // iOS 有配置，可以下载
-      smartDownloadBtn.href = DOWNLOAD_LINKS.ios;
-      smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
-      smartDownloadBtn.style.cursor = "pointer";
-      smartDownloadBtn.style.opacity = "1";
-    } else {
-      // iOS 无配置，显示敬请期待
-      smartDownloadBtn.href = "#";
-      smartDownloadBtn.textContent = "รองรับเฉพาะอุปกรณ์ Android · iOS ยังไม่ได้รองรับ";
-      smartDownloadBtn.style.cursor = "not-allowed";
-      smartDownloadBtn.style.opacity = "0.6";
-      smartDownloadBtn.onclick = (e) => e.preventDefault();
-    }
-    return;
-  }
-  if (isAndroid) {
-    singleButtonWrap.style.display = "block";
-    multiButtonWrap.style.display = "none";
-    smartDownloadBtn.href = DOWNLOAD_LINKS.android;
-    smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
-    smartDownloadBtn.style.cursor = "pointer";
-    smartDownloadBtn.style.opacity = "1";
-    return;
-  }
-  // 桌面端：默认下载安卓
   singleButtonWrap.style.display = "block";
   multiButtonWrap.style.display = "none";
+  if (isIOS) {
+    smartDownloadBtn.href = "#";
+    smartDownloadBtn.textContent = "iOS เวอร์ชัน · เร็วๆ นี้";
+    smartDownloadBtn.style.cursor = "not-allowed";
+    smartDownloadBtn.style.opacity = "0.6";
+    smartDownloadBtn.onclick = (e) => e.preventDefault();
+    return;
+  }
+  // Android + 桌面端
   smartDownloadBtn.href = DOWNLOAD_LINKS.android;
   smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
   smartDownloadBtn.style.cursor = "pointer";
