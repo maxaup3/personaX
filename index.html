@@ -237,12 +237,13 @@ async function loadData() {
       console.log("Refs:", refs);
       console.log("Clicks:", clicks);
 
+      const refNames = new Set(refs.map(r => r.name));
       const clickMap = {};
       let totalPC = 0, totalMobile = 0;
       clicks.forEach(c => {
+        if (!refNames.has(c.ref)) return; // 跳过已删除链接的记录
         if (!clickMap[c.ref]) clickMap[c.ref] = { pc: 0, mobile: 0, device_ids: new Set() };
-        // 去重：同一设备只计一次
-        const key = `${c.ref}-${c.device_id}-${c.platform}`;
+        const key = `${c.ref}-${c.device_id}`;
         if (!clickMap[c.ref].device_ids.has(key)) {
           clickMap[c.ref].device_ids.add(key);
           const isPC = c.platform === 'desktop';
