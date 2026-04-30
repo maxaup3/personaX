@@ -29,10 +29,10 @@ html, body {
 /* 视频区 */
 .preview-section {
   flex: 1;
-  min-height: 0;
+  min-height: 55vh;
   position: relative;
   z-index: 1;
-  
+
   display: flex;
   overflow: hidden;
 
