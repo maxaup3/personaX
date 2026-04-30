@@ -222,17 +222,7 @@
       showToast("链接生成成功");
     }
 
-    function attachDeleteHandlers() {
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const name = btn.getAttribute('data-name');
-          deleteRef(name);
-        });
-      });
-    }
-
-    async function loadData() {
+async function loadData() {
       const [refsRes, clicksRes] = await Promise.all([
         fetch(`${SUPABASE_URL}/rest/v1/refs?select=name,created_at&order=created_at.desc`, {
           headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
@@ -255,9 +245,10 @@
         const key = `${c.ref}-${c.device_id}-${c.platform}`;
         if (!clickMap[c.ref].device_ids.has(key)) {
           clickMap[c.ref].device_ids.add(key);
-          if (c.platform === 'desktop') clickMap[c.ref].pc++;
+          const isPC = c.platform === 'desktop';
+          if (isPC) clickMap[c.ref].pc++;
           else clickMap[c.ref].mobile++;
-          if (c.platform === 'desktop') totalPC++;
+          if (isPC) totalPC++;
           else totalMobile++;
         }
       });
@@ -288,14 +279,14 @@
           <td style="text-align: center;"><span class="badge ${stats.pc === 0 ? 'badge-gray' : 'badge-pink'}">${stats.pc}</span></td>
           <td style="text-align: center;"><span class="badge ${stats.mobile === 0 ? 'badge-gray' : 'badge-pink'}">${stats.mobile}</span></td>
           <td style="text-align: center;"><span class="badge ${total === 0 ? 'badge-gray' : 'badge-pink'}">${total}</span></td>
-          <td style="text-align: right;"><button class="btn btn-icon delete-btn" data-name="${r.name}" title="删除"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button></td>
+          <td style="text-align: right;"><button class="btn btn-icon" onclick="deleteRef(this.dataset.name)" data-name="${r.name}" title="删除"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button></td>
         </tr>`;
       }).join('');
 
-      attachDeleteHandlers();
     }
 
     async function deleteRef(name) {
+      if (!confirm(`确定删除「${name}」？`)) return;
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/refs?name=eq.${encodeURIComponent(name)}`, {
           method: "DELETE",
