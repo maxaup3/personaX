@@ -7,8 +7,14 @@ let DOWNLOAD_LINKS = {
 };
 let VIDEO_URL = "";
 
+// 默认 URL
+const DEFAULT_ANDROID_URL = "https://apk.qiandaocdn.com/apk/release/app-v1.0-1-20260430151207/echo-personax-1.0-1-release.apk";
+const DEFAULT_VIDEO_URL = "https://image.tensorartassets.com/operation/media/2026-04/38e771a2-2de1-4c2d-8205-4ddb084e01e9.mp4";
+
 // 加载配置
 async function loadConfigAndInit() {
+  DOWNLOAD_LINKS.android = DEFAULT_ANDROID_URL;
+  VIDEO_URL = DEFAULT_VIDEO_URL;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/config`, {
       headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
@@ -22,7 +28,7 @@ async function loadConfigAndInit() {
   } catch (e) {}
   applySmartDownloadState();
   const heroVideo = document.getElementById("heroVideo");
-  if (VIDEO_URL) heroVideo.src = VIDEO_URL;
+  heroVideo.src = VIDEO_URL;
 }
 
 loadConfigAndInit();

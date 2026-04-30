@@ -176,8 +176,8 @@
     <div class="config-grid">
       <div class="config-item">
         <label>Android 下载链接</label>
-        <input type="text" id="androidUrl" placeholder="输入 Android 下载链接" />
-        <button class="btn-primary" onclick="saveConfigRequired('android_url', document.getElementById('androidUrl').value)">保存</button>
+        <input type="text" id="androidUrl" placeholder="留空则使用默认链接" />
+        <button class="btn-primary" onclick="saveConfigAndroid()">保存</button>
       </div>
       <div class="config-item">
         <label>iOS 下载链接（可选）</label>
@@ -186,7 +186,7 @@
       </div>
       <div class="config-item">
         <label>视频链接</label>
-        <input type="text" id="videoUrl" placeholder="输入视频链接" />
+        <input type="text" id="videoUrl" placeholder="留空则使用默认链接" />
         <button class="btn-primary" onclick="saveConfigVideo()">保存</button>
       </div>
     </div>
@@ -239,12 +239,9 @@
     showToast("保存成功");
   }
 
-  async function saveConfigRequired(key, value) {
-    if (!value) {
-      showToast("请输入内容");
-      return;
-    }
-    await saveConfigActual(key, value);
+  async function saveConfigAndroid() {
+    const value = document.getElementById("androidUrl").value;
+    await saveConfigActual('android_url', value);
   }
 
   async function saveConfigIos() {
@@ -254,10 +251,6 @@
 
   async function saveConfigVideo() {
     const value = document.getElementById("videoUrl").value;
-    if (!value) {
-      showToast("请输入内容");
-      return;
-    }
     await saveConfigActual('video_url', value);
   }
 
