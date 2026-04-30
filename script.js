@@ -138,15 +138,15 @@ function applySmartDownloadState() {
 
 smartDownloadBtn.addEventListener("click", (e) => {
   if (isIOS) return;
-  recordClick("android");
+  recordClick(isAndroid ? "mobile" : "desktop");
   if (inWechat || inQQ) {
     e.preventDefault();
   }
 });
 
-androidBtn.addEventListener("click", () => recordClick("android"));
+androidBtn.addEventListener("click", () => recordClick("mobile"));
 iosBtn.addEventListener("click", (e) => {
-  recordClick("ios");
+  recordClick("mobile");
   if (inWechat || inQQ) {
     e.preventDefault();
     openIosGuide();
