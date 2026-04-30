@@ -81,7 +81,7 @@ const closeGuide = document.getElementById("closeGuide");
 
 const ua = navigator.userAgent.toLowerCase();
 const isIOS = /iphone|ipad|ipod/.test(ua);
-const isAndroid = /android/.test(ua) && !/windows|linux|macintosh/.test(ua);
+const isAndroid = /android/.test(ua) && /linux/.test(ua) && !/x11/.test(ua);
 const inWechat = /micromessenger/.test(ua);
 const inQQ = /qq\//.test(ua);
 
