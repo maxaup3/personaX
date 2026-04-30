@@ -6,164 +6,213 @@
   <title>personaX 管理后台</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --color-text-primary: #1a1a2e;
+      --color-text-secondary: #6b6b7f;
+      --color-text-tertiary: #9999a6;
+      --color-border: #e5e5ed;
+      --color-bg-primary: #fff;
+      --color-bg-secondary: #f8f8fb;
+      --color-accent: #fa55aa;
+      --color-accent-dark: #ff44cd;
+      --color-badge-zero: #e8e8f0;
+      --color-badge-zero-text: #9999a6;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-lg: 16px;
+      --spacing-xl: 20px;
+      --spacing-2xl: 24px;
+      --spacing-3xl: 28px;
+      --spacing-4xl: 40px;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 999px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --shadow-focus: 0 0 0 3px rgba(250, 85, 170, 0.1);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: "Outfit", sans-serif;
-      background: #f8f9fa;
-      color: #2d2940;
+      font-family: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
       min-height: 100vh;
+      line-height: 1.5;
     }
 
     /* 主页面 */
-    #mainPage { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+    #mainPage { padding: var(--spacing-4xl) var(--spacing-lg); max-width: 1000px; margin: 0 auto; }
     .page-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 28px;
+      align-items: flex-start;
+      margin-bottom: var(--spacing-3xl);
     }
-    .page-header h1 { font-size: 1.5rem; font-weight: 800; }
-    .page-header p { color: #8f86a4; font-size: 0.85rem; margin-top: 4px; }
-    .stats-desc { color: #8f86a4; font-size: 0.8rem; margin-top: 4px; }
+    .page-header h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; }
+    .page-header p { color: var(--color-text-secondary); font-size: 0.875rem; margin-top: var(--spacing-sm); font-weight: 500; }
+    .stats-desc { color: var(--color-text-tertiary); font-size: 0.8125rem; margin-top: var(--spacing-xs); }
     .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e8e8f0;
+      background: var(--color-bg-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-3xl);
+      margin-bottom: var(--spacing-2xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-border);
+      transition: box-shadow 0.2s ease-out;
     }
-    .card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: #2d2940; }
+    .card:hover { box-shadow: var(--shadow-lg); }
+    .card h2 { font-size: 1.0625rem; font-weight: 700; margin-bottom: var(--spacing-xl); color: var(--color-text-primary); }
 
-    .input-row { display: flex; gap: 12px; }
+    .input-row { display: flex; gap: var(--spacing-md); }
     input[type="text"] {
       flex: 1;
-      padding: 12px 18px;
-      border-radius: 999px;
-      border: 1.5px solid #e0d8f0;
-      font-size: 0.95rem;
-      font-family: "Outfit", sans-serif;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--color-border);
+      font-size: 0.9375rem;
+      font-family: inherit;
       outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input[type="text"]:focus { border-color: #fa55aa; }
+    input[type="text"]:hover { border-color: #d0d0dd; }
+    input[type="text"]:focus { border-color: var(--color-accent); box-shadow: var(--shadow-focus); }
     .btn-primary {
-      padding: 12px 22px;
-      border-radius: 999px;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-full);
       border: none;
-      background: linear-gradient(180deg, #fa55aa, #ff44cd);
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
       color: #fff;
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
-      font-family: "Outfit", sans-serif;
+      font-family: inherit;
       white-space: nowrap;
+      transition: all 0.2s ease-out;
+      box-shadow: var(--shadow-sm);
     }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+    .btn-primary:active { transform: translateY(0); }
 
     /* 链接列表 */
     .list-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: var(--spacing-xl);
     }
     .btn-ghost {
-      padding: 7px 16px;
-      border-radius: 999px;
-      border: 1.5px solid #e0d8f0;
-      background: #fff;
-      color: #8f86a4;
-      font-size: 0.8rem;
-      font-family: "Outfit", sans-serif;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-primary);
+      color: var(--color-text-secondary);
+      font-size: 0.8125rem;
+      font-family: inherit;
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .btn-ghost:hover { background: var(--color-bg-secondary); border-color: #d0d0dd; color: var(--color-text-primary); }
 
     table { width: 100%; border-collapse: collapse; }
     th {
       text-align: center;
-      font-size: 0.8rem;
-      color: #8f86a4;
-      padding: 12px;
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+      padding: var(--spacing-md);
       font-weight: 600;
-      border-bottom: 2px solid #f0f0f5;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--color-border);
     }
     th:first-child { text-align: left; }
-    th:last-child { text-align: center; padding-right: 12px; }
     td {
-      padding: 16px 12px;
-      border-top: 1px solid #f5f5f8;
+      padding: var(--spacing-lg) var(--spacing-md);
+      border-top: 1px solid #fafafc;
       font-size: 0.9rem;
       vertical-align: middle;
       text-align: center;
     }
     td:first-child { text-align: left; }
-    td:last-child { text-align: center; }
-    .ref-name { font-weight: 700; display: block; margin-bottom: 6px; color: #2d2940; }
+    .ref-name { font-weight: 700; display: block; margin-bottom: var(--spacing-xs); color: var(--color-text-primary); }
     .ref-url {
-      font-size: 0.78rem;
-      color: #8f86a4;
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--spacing-sm);
     }
-    .ref-url a { color: #666; text-decoration: none; word-break: break-all; font-size: 0.75rem; }
+    .ref-url a { color: var(--color-text-tertiary); text-decoration: none; word-break: break-all; }
     .copy-icon {
       cursor: pointer;
       opacity: 0.5;
       flex-shrink: 0;
-      transition: opacity 0.15s;
+      transition: all 0.2s;
+      display: flex;
     }
     .copy-icon:hover { opacity: 1; }
     .badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 20px;
-      background: linear-gradient(180deg, #fa55aa, #ff44cd);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
       color: #fff;
-      font-size: 0.85rem;
+      font-size: 0.8125rem;
       font-weight: 700;
-      min-width: 50px;
-      text-align: center;
+      min-width: 48px;
+      height: 32px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
     }
+    .badge:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
     .badge.zero {
-      background: #e8e8f0;
-      color: #a8a4ba;
+      background: var(--color-badge-zero);
+      color: var(--color-badge-zero-text);
     }
     .del-btn {
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid #e8e8f0;
-      background: #fff;
-      color: #8f86a4;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-primary);
+      color: var(--color-text-secondary);
       font-size: 0.8rem;
-      font-family: "Outfit", sans-serif;
+      font-family: inherit;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .del-btn:hover { background: #f5f5f8; border-color: #d8d8e0; color: #2d2940; }
-    .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    .config-item { display: flex; flex-direction: column; gap: 8px; }
-    .config-item label { font-size: 0.75rem; color: #8f86a4; font-weight: 600; }
-    .config-item input { padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0d8f0; font-size: 0.85rem; }
-    .config-item input:focus { border-color: #fa55aa; outline: none; }
-    .config-item .btn-primary { padding: 8px 12px; font-size: 0.8rem; }
+    .del-btn:hover { background: var(--color-bg-secondary); border-color: #d0d0dd; color: var(--color-text-primary); }
+    .del-btn:active { transform: scale(0.98); }
+    .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-xl); }
+    .config-item { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+    .config-item label { font-size: 0.8125rem; color: var(--color-text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .config-item input { padding: var(--spacing-md) var(--spacing-lg); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: 0.875rem; font-family: inherit; transition: all 0.2s; }
+    .config-item input:focus { border-color: var(--color-accent); outline: none; box-shadow: var(--shadow-focus); }
+    .config-item .btn-primary { padding: var(--spacing-sm) var(--spacing-md); font-size: 0.75rem; }
     .toast {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #2d2940;
+      background: var(--color-text-primary);
       color: #fff;
-      padding: 16px 28px;
-      border-radius: 8px;
-      font-size: 0.9rem;
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      border-radius: var(--radius-md);
+      font-size: 0.9375rem;
+      font-weight: 500;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s ease-out;
       z-index: 999;
       pointer-events: none;
+      box-shadow: var(--shadow-lg);
     }
     .toast.show { opacity: 1; }
-    .loading { color: #8f86a4; font-size: 0.9rem; padding: 20px 0; }
-    .empty { color: #8f86a4; font-size: 0.9rem; padding: 24px 0; text-align: center; }
+    .loading { color: var(--color-text-secondary); font-size: 0.9rem; padding: var(--spacing-xl) 0; text-align: center; }
+    .empty { color: var(--color-text-secondary); font-size: 0.9rem; padding: var(--spacing-2xl) 0; text-align: center; }
   </style>
 </head>
 <body>
