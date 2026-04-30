@@ -29,7 +29,7 @@ html, body {
 /* 视频区 */
 .preview-section {
   flex: 1;
-  min-height: 55vh;
+  min-height: 75vh;
   position: relative;
   z-index: 1;
 
