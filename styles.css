@@ -19,7 +19,7 @@ html, body {
 .shell {
   width: 100%;
   max-width: 430px;
-  min-height: 100vh;
+  min-height: 100svh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@ html, body {
 /* 视频区 */
 .preview-section {
   flex: 1;
-  min-height: 75vh;
+  min-height: 70svh;
   position: relative;
   z-index: 1;
 
