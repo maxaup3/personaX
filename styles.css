@@ -28,7 +28,7 @@ html, body {
 
 /* 视频区 */
 .preview-section {
-  flex: 1;
+  flex: 7;
   min-height: 0;
   position: relative;
   z-index: 1;
@@ -49,6 +49,7 @@ html, body {
 
 /* 品牌区 - 顶部弧形用伪元素 */
 .brand-section {
+  flex: 3;
   flex-shrink: 0;
   width: 100%;
   padding: 0 18px 28px;
