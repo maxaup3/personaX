@@ -24,7 +24,8 @@ html, body {
   display: flex;
   flex-direction: column;
   background: var(--brand);
-  overflow-y: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 视频区 */
@@ -53,7 +54,8 @@ html, body {
 .brand-section {
   flex: 1;
   flex-shrink: 1;
-  overflow: hidden;
+  overflow: visible;
+  z-index: 3;
   width: 100%;
   padding: 0 18px 8px;
   text-align: center;
