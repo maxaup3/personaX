@@ -66,7 +66,7 @@ async function recordClick(platform) {
         "Content-Type": "application/json",
         "Prefer": "resolution=ignore-duplicates"
       },
-      body: JSON.stringify({ ref, device_id })
+      body: JSON.stringify({ ref, device_id, platform })
     });
   } catch (e) {}
 }
