@@ -104,11 +104,20 @@ function applySmartDownloadState() {
   singleButtonWrap.style.display = "block";
   multiButtonWrap.style.display = "none";
   if (isIOS) {
-    smartDownloadBtn.href = "#";
-    smartDownloadBtn.textContent = "iOS เวอร์ชัน · เร็วๆ นี้";
-    smartDownloadBtn.style.cursor = "not-allowed";
-    smartDownloadBtn.style.opacity = "0.6";
-    smartDownloadBtn.onclick = (e) => e.preventDefault();
+    if (DOWNLOAD_LINKS.ios) {
+      smartDownloadBtn.href = DOWNLOAD_LINKS.ios;
+      smartDownloadBtn.setAttribute('rel', 'noreferrer');
+      smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+      smartDownloadBtn.style.cursor = "pointer";
+      smartDownloadBtn.style.opacity = "1";
+      smartDownloadBtn.onclick = null;
+    } else {
+      smartDownloadBtn.href = "#";
+      smartDownloadBtn.textContent = "iOS เวอร์ชัน · เร็วๆ นี้";
+      smartDownloadBtn.style.cursor = "not-allowed";
+      smartDownloadBtn.style.opacity = "0.6";
+      smartDownloadBtn.onclick = (e) => e.preventDefault();
+    }
     return;
   }
   // Android + 桌面端
