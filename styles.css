@@ -29,7 +29,8 @@ html, body {
 
 /* 视频区 */
 .preview-section {
-  flex: 8;
+  height: 80svh;
+  flex-shrink: 0;
   min-height: 0;
   position: relative;
   z-index: 1;
@@ -50,8 +51,9 @@ html, body {
 
 /* 品牌区 - 顶部弧形用伪元素 */
 .brand-section {
-  flex: 2;
-  flex-shrink: 2;
+  flex: 1;
+  flex-shrink: 1;
+  overflow: hidden;
   width: 100%;
   padding: 0 18px 8px;
   text-align: center;
@@ -218,7 +220,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0;
+  padding: 0 !important;
 }
 
 .links-row {
@@ -268,7 +270,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0;
+  padding: 0 !important;
 }
 
 .links-row {
