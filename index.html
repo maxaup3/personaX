@@ -9,13 +9,13 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: "Outfit", sans-serif;
-      background: #f5f0ff;
+      background: #f8f9fa;
       color: #2d2940;
       min-height: 100vh;
     }
 
     /* 主页面 */
-    #mainPage { padding: 32px 20px; max-width: 720px; margin: 0 auto; }
+    #mainPage { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
     .page-header {
       display: flex;
       justify-content: space-between;
@@ -27,14 +27,15 @@
     .stats-desc { color: #8f86a4; font-size: 0.8rem; margin-top: 4px; }
     .card {
       background: #fff;
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 16px rgba(100, 80, 160, 0.08);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8e8f0;
     }
-    .card h2 { font-size: 0.95rem; font-weight: 700; margin-bottom: 16px; color: #5a526e; }
+    .card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: #2d2940; }
 
-    .input-row { display: flex; gap: 10px; }
+    .input-row { display: flex; gap: 12px; }
     input[type="text"] {
       flex: 1;
       padding: 12px 18px;
@@ -78,31 +79,33 @@
 
     table { width: 100%; border-collapse: collapse; }
     th {
-      text-align: left;
-      font-size: 0.75rem;
+      text-align: center;
+      font-size: 0.8rem;
       color: #8f86a4;
-      padding: 0 12px 12px 0;
+      padding: 12px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      border-bottom: 2px solid #f0f0f5;
     }
-    th:last-child { text-align: right; padding-right: 0; }
+    th:first-child { text-align: left; }
+    th:last-child { text-align: center; padding-right: 12px; }
     td {
-      padding: 12px 12px 12px 0;
-      border-top: 1px solid #f0eaff;
+      padding: 16px 12px;
+      border-top: 1px solid #f5f5f8;
       font-size: 0.9rem;
       vertical-align: middle;
+      text-align: center;
     }
-    td:last-child { text-align: right; padding-right: 0; }
-    .ref-name { font-weight: 700; display: block; margin-bottom: 3px; }
+    td:first-child { text-align: left; }
+    td:last-child { text-align: center; }
+    .ref-name { font-weight: 700; display: block; margin-bottom: 6px; color: #2d2940; }
     .ref-url {
       font-size: 0.78rem;
       color: #8f86a4;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-    .ref-url a { color: #fa55aa; text-decoration: none; word-break: break-all; }
+    .ref-url a { color: #666; text-decoration: none; word-break: break-all; font-size: 0.75rem; }
     .copy-icon {
       cursor: pointer;
       opacity: 0.5;
@@ -112,28 +115,31 @@
     .copy-icon:hover { opacity: 1; }
     .badge {
       display: inline-block;
-      padding: 4px 12px;
-      border-radius: 999px;
+      padding: 6px 14px;
+      border-radius: 20px;
       background: linear-gradient(180deg, #fa55aa, #ff44cd);
       color: #fff;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 700;
+      min-width: 50px;
+      text-align: center;
     }
     .badge.zero {
-      background: #f0eaff;
-      color: #8f86a4;
+      background: #e8e8f0;
+      color: #a8a4ba;
     }
     .del-btn {
-      padding: 5px 12px;
-      border-radius: 999px;
-      border: 1.5px solid #ffd0e8;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid #e8e8f0;
       background: #fff;
-      color: #fa55aa;
-      font-size: 0.78rem;
+      color: #8f86a4;
+      font-size: 0.8rem;
       font-family: "Outfit", sans-serif;
       cursor: pointer;
+      transition: all 0.2s;
     }
-    .del-btn:hover { background: #fff0f7; }
+    .del-btn:hover { background: #f5f5f8; border-color: #d8d8e0; color: #2d2940; }
     .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
     .config-item { display: flex; flex-direction: column; gap: 8px; }
     .config-item label { font-size: 0.75rem; color: #8f86a4; font-weight: 600; }
