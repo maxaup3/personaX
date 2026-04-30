@@ -222,6 +222,16 @@
       showToast("链接生成成功");
     }
 
+    function attachDeleteHandlers() {
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const name = btn.getAttribute('data-name');
+          deleteRef(name);
+        });
+      });
+    }
+
     async function loadData() {
       const [refsRes, clicksRes] = await Promise.all([
         fetch(`${SUPABASE_URL}/rest/v1/refs?select=name,created_at&order=created_at.desc`, {
@@ -275,13 +285,7 @@
         </tr>`;
       }).join('');
 
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const name = btn.getAttribute('data-name');
-          deleteRef(name);
-        });
-      });
+      attachDeleteHandlers();
     }
 
     async function deleteRef(name) {
@@ -291,15 +295,12 @@
           method: "DELETE",
           headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
         });
-        const text = await res.text();
-        console.log("Delete response:", res.status, text);
         if (!res.ok) {
           showToast(`删除失败: ${res.status}`);
           return;
         }
         showToast("链接已删除");
-        await new Promise(r => setTimeout(r, 500));
-        loadData();
+        await loadData();
       } catch (e) {
         console.error("Delete error:", e);
         showToast("删除失败，请重试");
