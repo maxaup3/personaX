@@ -1,10 +1,31 @@
 const SUPABASE_URL = "https://otooejlgiviktlwaravv.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
 
-const DOWNLOAD_LINKS = {
-  android: "https://example.com/app-latest.apk",
-  ios: "https://apps.apple.com/",
+let DOWNLOAD_LINKS = {
+  android: "",
+  ios: "",
 };
+let VIDEO_URL = "";
+
+// 加载配置
+async function loadConfigAndInit() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/config`, {
+      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+    });
+    const configs = await res.json();
+    const configMap = {};
+    configs.forEach(c => { configMap[c.key] = c.value; });
+    if (configMap.android_url) DOWNLOAD_LINKS.android = configMap.android_url;
+    if (configMap.ios_url) DOWNLOAD_LINKS.ios = configMap.ios_url;
+    if (configMap.video_url) VIDEO_URL = configMap.video_url;
+  } catch (e) {}
+  applySmartDownloadState();
+  const heroVideo = document.getElementById("heroVideo");
+  if (VIDEO_URL) heroVideo.src = VIDEO_URL;
+}
+
+loadConfigAndInit();
 
 // 从 URL 获取 ref 参数（分发链接名字）
 const urlParams = new URLSearchParams(window.location.search);
@@ -75,11 +96,20 @@ function applySmartDownloadState() {
   if (isIOS) {
     singleButtonWrap.style.display = "block";
     multiButtonWrap.style.display = "none";
-    smartDownloadBtn.href = "#";
-    smartDownloadBtn.textContent = "รองรับเฉพาะอุปกรณ์ Android · iOS ยังไม่ได้รองรับ";
-    smartDownloadBtn.style.cursor = "not-allowed";
-    smartDownloadBtn.style.opacity = "0.6";
-    smartDownloadBtn.onclick = (e) => e.preventDefault();
+    if (DOWNLOAD_LINKS.ios) {
+      // iOS 有配置，可以下载
+      smartDownloadBtn.href = DOWNLOAD_LINKS.ios;
+      smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+      smartDownloadBtn.style.cursor = "pointer";
+      smartDownloadBtn.style.opacity = "1";
+    } else {
+      // iOS 无配置，显示敬请期待
+      smartDownloadBtn.href = "#";
+      smartDownloadBtn.textContent = "รองรับเฉพาะอุปกรณ์ Android · iOS ยังไม่ได้รองรับ";
+      smartDownloadBtn.style.cursor = "not-allowed";
+      smartDownloadBtn.style.opacity = "0.6";
+      smartDownloadBtn.onclick = (e) => e.preventDefault();
+    }
     return;
   }
   if (isAndroid) {

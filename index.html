@@ -133,6 +133,12 @@
       cursor: pointer;
     }
     .del-btn:hover { background: #fff0f7; }
+    .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .config-item { display: flex; flex-direction: column; gap: 8px; }
+    .config-item label { font-size: 0.75rem; color: #8f86a4; font-weight: 600; }
+    .config-item input { padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0d8f0; font-size: 0.85rem; }
+    .config-item input:focus { border-color: #fa55aa; outline: none; }
+    .config-item .btn-primary { padding: 8px 12px; font-size: 0.8rem; }
     .loading { color: #8f86a4; font-size: 0.9rem; padding: 20px 0; }
     .empty { color: #8f86a4; font-size: 0.9rem; padding: 24px 0; text-align: center; }
   </style>
@@ -145,6 +151,28 @@
     <div>
       <h1>下载链接管理</h1>
       <p>生成分发链接 · 查看各渠道点击数据</p>
+    </div>
+  </div>
+
+  <!-- 下载链接配置 -->
+  <div class="card">
+    <h2>下载链接配置</h2>
+    <div class="config-grid">
+      <div class="config-item">
+        <label>Android 下载链接</label>
+        <input type="text" id="androidUrl" placeholder="输入 Android 下载链接" />
+        <button class="btn-primary" onclick="saveConfig('android_url', document.getElementById('androidUrl').value)">保存</button>
+      </div>
+      <div class="config-item">
+        <label>iOS 下载链接（可选）</label>
+        <input type="text" id="iosUrl" placeholder="留空则不显示 iOS 下载选项" />
+        <button class="btn-primary" onclick="saveConfig('ios_url', document.getElementById('iosUrl').value)">保存</button>
+      </div>
+      <div class="config-item">
+        <label>视频链接</label>
+        <input type="text" id="videoUrl" placeholder="输入视频链接" />
+        <button class="btn-primary" onclick="saveConfig('video_url', document.getElementById('videoUrl').value)">保存</button>
+      </div>
     </div>
   </div>
 
@@ -173,6 +201,42 @@
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90b29lamxnaXZpa3Rsd2FyYXZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NDY2OTUsImV4cCI6MjA5MzAyMjY5NX0.ZI0rjBKnKbPOSoFrqr93psDiw6n6AwUAeaWqqnCthSg";
   const BASE_URL = window.location.origin + "/download.html";
 
+  async function saveConfig(key, value) {
+    await fetch(`${SUPABASE_URL}/rest/v1/config`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "resolution=ignore-duplicates"
+      },
+      body: JSON.stringify({ key, value })
+    }).catch(() => {});
+    // 如果 key 已存在，用 UPSERT 更新
+    await fetch(`${SUPABASE_URL}/rest/v1/config?key=eq.${encodeURIComponent(key)}`, {
+      method: "PATCH",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ value })
+    });
+  }
+
+  async function loadConfig() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/config`, {
+      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+    });
+    const configs = await res.json();
+    const configMap = {};
+    configs.forEach(c => { configMap[c.key] = c.value; });
+    if (configMap.android_url) document.getElementById("androidUrl").value = configMap.android_url;
+    if (configMap.ios_url) document.getElementById("iosUrl").value = configMap.ios_url;
+    if (configMap.video_url) document.getElementById("videoUrl").value = configMap.video_url;
+  }
+
+  loadConfig();
   loadData();
 
   async function createRef() {
