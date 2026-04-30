@@ -75,8 +75,11 @@ function applySmartDownloadState() {
   if (isIOS) {
     singleButtonWrap.style.display = "block";
     multiButtonWrap.style.display = "none";
-    smartDownloadBtn.href = DOWNLOAD_LINKS.ios;
-    smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+    smartDownloadBtn.href = "#";
+    smartDownloadBtn.textContent = "รองรับเฉพาะอุปกรณ์ Android · iOS ยังไม่ได้รองรับ";
+    smartDownloadBtn.style.cursor = "not-allowed";
+    smartDownloadBtn.style.opacity = "0.6";
+    smartDownloadBtn.onclick = (e) => e.preventDefault();
     return;
   }
   if (isAndroid) {
@@ -84,6 +87,8 @@ function applySmartDownloadState() {
     multiButtonWrap.style.display = "none";
     smartDownloadBtn.href = DOWNLOAD_LINKS.android;
     smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+    smartDownloadBtn.style.cursor = "pointer";
+    smartDownloadBtn.style.opacity = "1";
     return;
   }
   // 桌面端：默认下载安卓
@@ -91,13 +96,15 @@ function applySmartDownloadState() {
   multiButtonWrap.style.display = "none";
   smartDownloadBtn.href = DOWNLOAD_LINKS.android;
   smartDownloadBtn.textContent = "ดาวน์โหลดเลย · สร้างฟรี 30 ครั้ง/วัน";
+  smartDownloadBtn.style.cursor = "pointer";
+  smartDownloadBtn.style.opacity = "1";
 }
 
 smartDownloadBtn.addEventListener("click", (e) => {
-  recordClick(isIOS ? "ios" : "android");
-  if (isIOS && (inWechat || inQQ)) {
+  if (isIOS) return;
+  recordClick("android");
+  if (inWechat || inQQ) {
     e.preventDefault();
-    openIosGuide();
   }
 });
 
