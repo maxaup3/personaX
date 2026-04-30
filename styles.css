@@ -12,14 +12,14 @@ html, body {
   height: 100%;
   font-family: "Outfit", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: var(--ink);
-  overflow: hidden;
+  overflow: auto;
   background: #111;
 }
 
 .shell {
   width: 100%;
   max-width: 430px;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
